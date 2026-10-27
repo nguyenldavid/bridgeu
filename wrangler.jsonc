@@ -1,6 +1,6 @@
 // Only needed for direct uploads (`npx wrangler pages deploy`). The Git integration reads build settings from the dashboard.
 {
-  "name": "bridgeu-site",
+  "name": "bridgeu",
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-10-01"
 }
