@@ -45,7 +45,7 @@ const ld = {
 <Base title="Frequently asked questions" description="Answers to common questions about BridgeU, listing opportunities and staying updated." jsonLd={ld}>
   <PageHero eyebrow="FAQ" title="Frequently asked questions" image={support} />
   <div class="container-page max-w-3xl py-12">
-    <div class="divide-y divide-line rounded-3xl border border-line">
+    <div data-reveal class="divide-y divide-line rounded-2xl border border-line">
       {
         faqs.map((f, i) => (
           <details class="group p-5 sm:p-6" open={i === 0}>
@@ -58,7 +58,7 @@ const ld = {
         ))
       }
     </div>
-    <div class="mt-10 rounded-3xl bg-canvas p-6 ring-1 ring-line">
+    <div data-reveal class="mt-10 rounded-2xl bg-canvas p-6 ring-1 ring-line">
       <h2 class="text-xl font-bold">Other questions</h2>
       <p class="mt-2 text-muted">If your question isn’t answered here, contact our team using our <a href="/contact" class="font-semibold text-brand-700 underline">contact form</a> or by email at <a href="mailto:hello@bridgeu.ca" class="font-semibold text-brand-700 underline">hello@bridgeu.ca</a>.</p>
     </div>

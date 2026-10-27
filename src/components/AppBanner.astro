@@ -15,8 +15,9 @@ const { placement, title, text, label = 'Get alerts in the app', city, tone = 'b
 ---
 
 <section
+  data-reveal
   class:list={[
-    'flex flex-col items-start gap-5 rounded-3xl p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8',
+    'flex flex-col items-start gap-5 rounded-2xl p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8',
     tone === 'brand' ? 'bg-brand-700 text-white' : 'border border-brand-100 bg-brand-50 text-ink',
     className,
   ]}

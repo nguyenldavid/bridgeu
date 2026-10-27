@@ -14,10 +14,10 @@ const { eyebrow, title, intro, image, breadcrumbs } = Astro.props;
 
 <section class="overflow-hidden border-b border-line bg-gradient-to-b from-brand-50/70 to-white">
   <div class="container-page grid items-center gap-8 py-10 sm:py-14 md:grid-cols-[1fr_auto]">
-    <div class="max-w-3xl">
+    <div class="max-w-3xl" data-reveal-stagger>
       {
         breadcrumbs && (
-          <nav aria-label="Breadcrumb" class="mb-4 text-sm text-muted">
+          <nav aria-label="Breadcrumb" class="mb-4 text-sm text-muted" data-reveal>
             {breadcrumbs.map((b, i) => (
               <>
                 {i > 0 && <span class="mx-1.5 text-line">/</span>}
@@ -29,11 +29,11 @@ const { eyebrow, title, intro, image, breadcrumbs } = Astro.props;
           </nav>
         )
       }
-      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-balance sm:text-5xl">{title}</h1>
-      {intro && <p class="mt-4 text-lg text-pretty text-muted">{intro}</p>}
-      <div class="mt-6 flex flex-wrap gap-3 empty:hidden"><slot /></div>
+      {eyebrow && <p class="eyebrow" data-reveal>{eyebrow}</p>}
+      <h1 data-reveal class="mt-2 text-3xl font-extrabold tracking-tight text-balance sm:text-5xl">{title}</h1>
+      {intro && <p data-reveal class="mt-4 text-lg text-pretty text-muted">{intro}</p>}
+      <div data-reveal class="mt-6 flex flex-wrap gap-3 empty:hidden"><slot /></div>
     </div>
-    {image && <Image src={image} alt="" width={260} class="hidden h-auto w-56 mix-blend-multiply md:block lg:w-64" loading="eager" />}
+    {image && <Image data-reveal="scale" style="--reveal-i: 3" src={image} alt="" width={260} class="hidden h-auto w-56 mix-blend-multiply md:block lg:w-64" loading="eager" />}
   </div>
 </section>

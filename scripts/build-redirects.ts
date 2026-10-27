@@ -109,10 +109,11 @@ const STATIC: [string, string, number][] = [
   ['/post', '/submit', 301],
   ['/make-a-post', '/submit', 301],
   ['/subscribe', 'https://app.bridgeu.ca/?utm_source=bridgeu.ca&utm_medium=website&utm_campaign=subscribe-redirect', 302],
-  ['/medical-school-applications', '/blog/category/med-school', 301],
-  ['/medical-school-application-advice', '/blog/category/med-school', 301],
-  ['/medical-school-application-advice-database', '/blog/category/med-school', 301],
+  ['/medical-school-applications', '/blog/topic/medical-school', 301],
+  ['/medical-school-application-advice', '/blog/topic/medical-school', 301],
+  ['/medical-school-application-advice-database', '/blog/topic/medical-school', 301],
   ['/blog-posts-database', '/blog', 301],
+  ['/blog/category/med-school', '/blog/topic/medical-school', 301],
 ];
 const FALLBACKS: [string, string][] = [
   ['/kingstonopps/*', '/volunteering/kingston'],
@@ -123,8 +124,8 @@ const FALLBACKS: [string, string][] = [
   ['/london-database/*', '/organizations/london'],
   ['/rsrch/*', '/research'],
   ['/blog-posts-database/*', '/blog'],
-  ['/medical-school-application-advice-database/*', '/blog/category/med-school'],
-  ['/medical-school-applications/*', '/blog/category/med-school'],
+  ['/medical-school-application-advice-database/*', '/blog/topic/medical-school'],
+  ['/medical-school-applications/*', '/blog/topic/medical-school'],
   ['/team-database/*', '/about#team'],
 ];
 

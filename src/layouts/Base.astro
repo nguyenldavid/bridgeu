@@ -40,13 +40,19 @@ const ld = [org, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])]
 <html lang="en-CA">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add('js-reveal');</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Cloudflare Fonts rewrites this Google Fonts link to be served from bridgeu.ca once enabled on the zone. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap" />
     <meta name="theme-color" content="#6b38d4" />
     <meta property="og:site_name" content="BridgeU" />
     <meta property="og:type" content={ogType} />
@@ -65,5 +71,8 @@ const ld = [org, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])]
     </main>
     <Footer appCity={appCity} />
     <MobileCTABar appCity={appCity} />
+    <script>
+      import '../scripts/reveal';
+    </script>
   </body>
 </html>

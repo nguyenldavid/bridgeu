@@ -1,0 +1,10 @@
+---
+import BlogIndex from '../../../components/blog/BlogIndex.astro';
+import { TOPICS } from '../../../lib/blog';
+
+export function getStaticPaths() {
+  return TOPICS.map((topic) => ({ params: { topic: topic.slug }, props: { topic } }));
+}
+---
+
+<BlogIndex topic={Astro.props.topic} />

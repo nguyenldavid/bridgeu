@@ -39,7 +39,7 @@ const facts = [
 
     <div class="mt-6 grid gap-10 lg:grid-cols-[1fr_340px]">
       <article>
-        <header class="flex items-start gap-5">
+        <header data-reveal class="flex items-start gap-5">
           {d.logo && <EntityLogo src={d.logo} />}
           <div>
             {d.institution && <p class="font-medium text-brand-700">{d.institution}</p>}
@@ -51,7 +51,7 @@ const facts = [
           </div>
         </header>
 
-        <dl class="mt-8 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
+        <dl class="mt-8 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2">
           {facts.map((f) => (
             <div class="bg-white p-4">
               <dt class="text-xs font-semibold tracking-wide text-muted uppercase">{f.label}</dt>
@@ -68,8 +68,8 @@ const facts = [
       </article>
 
       <aside class="lg:pt-2">
-        <div class="space-y-4 lg:sticky lg:top-24">
-          <div class="rounded-3xl border border-line p-5 shadow-sm">
+        <div data-reveal style="--reveal-i: 2" class="space-y-4 lg:sticky lg:top-24">
+          <div class="rounded-2xl border border-line p-5 shadow-sm">
             <h2 class="font-bold">Apply</h2>
             <p class="mt-1 text-sm text-muted">Applications are handled by the program. Check their site for the current call.</p>
             {d.applyUrl && (
@@ -78,7 +78,7 @@ const facts = [
               </a>
             )}
           </div>
-          <div class="rounded-3xl bg-brand-700 p-5 text-white">
+          <div class="rounded-2xl bg-brand-700 p-5 text-white">
             <h2 class="font-bold">Deadlines & reminders</h2>
             <p class="mt-1 text-sm text-brand-100">See this year’s deadline for {d.title} and get a reminder before it closes.</p>
             <AppCTA placement="research-detail" label="See deadline in the app" city={appCity} variant="inverse" class="mt-4 w-full" />
@@ -93,7 +93,7 @@ const facts = [
         <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {related.map((r) => (
             <li>
-              <a href={researchHref(r)} class="block h-full rounded-2xl border border-line p-4 transition hover:border-brand-300 hover:shadow-md">
+              <a href={researchHref(r)} class="block h-full rounded-xl border border-line p-4 transition hover:border-brand-300 hover:shadow-md">
                 <p class="text-xs text-muted">{r.data.scope === 'national' ? 'Canada-wide' : r.data.city}</p>
                 <p class="mt-1 font-semibold leading-snug">{r.data.title}</p>
               </a>

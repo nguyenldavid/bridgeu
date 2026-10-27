@@ -14,10 +14,11 @@
 /post /submit 301
 /make-a-post /submit 301
 /subscribe https://app.bridgeu.ca/?utm_source=bridgeu.ca&utm_medium=website&utm_campaign=subscribe-redirect 302
-/medical-school-applications /blog/category/med-school 301
-/medical-school-application-advice /blog/category/med-school 301
-/medical-school-application-advice-database /blog/category/med-school 301
+/medical-school-applications /blog/topic/medical-school 301
+/medical-school-application-advice /blog/topic/medical-school 301
+/medical-school-application-advice-database /blog/topic/medical-school 301
 /blog-posts-database /blog 301
+/blog/category/med-school /blog/topic/medical-school 301
 
 # Items
 /blog-posts-database/february-research-opportunities /blog/february-research-opportunities-2024-01 301
@@ -639,6 +640,6 @@
 /london-database/* /organizations/london 301
 /rsrch/* /research 301
 /blog-posts-database/* /blog 301
-/medical-school-application-advice-database/* /blog/category/med-school 301
-/medical-school-applications/* /blog/category/med-school 301
+/medical-school-application-advice-database/* /blog/topic/medical-school 301
+/medical-school-applications/* /blog/topic/medical-school 301
 /team-database/* /about#team 301

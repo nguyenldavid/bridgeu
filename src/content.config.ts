@@ -82,6 +82,8 @@ const team = defineCollection({
     z.object({
       name: z.string(),
       role: z.string(),
+      /** Lower comes first on /about; everyone else follows alphabetically. */
+      order: z.number().default(100),
       photo: image().optional(),
       link: z.url().optional(),
     }),

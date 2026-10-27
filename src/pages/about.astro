@@ -7,19 +7,19 @@ import AppBanner from '../components/AppBanner.astro';
 import support from '../assets/site/showing_support.png';
 import voting from '../assets/site/voting.png';
 
-const team = (await getCollection('team')).sort((a, b) => a.data.name.localeCompare(b.data.name));
+const team = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name));
 ---
 
 <Base title="About us" description="BridgeU is a community-led project connecting students with nonprofits and research institutions that need them.">
   <PageHero eyebrow="About us" title="By the community, for the community." intro="BridgeU is a community-led project aiming to solve the needs of both students and nonprofits alike." image={support} />
 
-  <section class="container-page grid gap-10 py-14 md:grid-cols-2">
-    <div class="prose-bridge">
+  <section data-reveal-stagger class="container-page grid gap-10 py-14 md:grid-cols-2">
+    <div class="prose-bridge" data-reveal>
       <p>Many growing organizations need more volunteers to amplify their impact, while many students look for fulfilling ways to be involved in their community.</p>
       <p>We’ve built BridgeU to bridge the gap between this divide. Our platform connects volunteers to fulfilling opportunities at organizations dedicated to making a difference in their communities.</p>
       <p>By fostering this connection, BridgeU not only supports the invaluable work of nonprofits but also empowers students to actively engage in causes they care about.</p>
     </div>
-    <div class="rounded-3xl bg-canvas p-6 ring-1 ring-line sm:p-8">
+    <div data-reveal class="rounded-2xl bg-canvas p-6 ring-1 ring-line sm:p-8">
       <Image src={voting} alt="" width={160} class="h-auto w-32" />
       <h2 class="mt-4 text-2xl font-bold">Thank you!</h2>
       <p class="mt-2 text-muted">Thank you for using and supporting BridgeU! We wouldn’t be able to curate and host the latest opportunities without your help.</p>
@@ -32,11 +32,11 @@ const team = (await getCollection('team')).sort((a, b) => a.data.name.localeComp
   </section>
 
   <section id="team" class="container-page scroll-mt-24 pb-6">
-    <h2 class="text-2xl font-bold tracking-tight">Our team</h2>
-    <ul class="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-6">
+    <h2 data-reveal class="text-2xl font-bold tracking-tight">Our team</h2>
+    <ul data-reveal-stagger class="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-6">
       {
         team.map((m) => (
-          <li class="text-center">
+          <li data-reveal class="text-center">
             {m.data.photo ? (
               <Image src={m.data.photo} alt="" width={240} height={240} fit="cover" class="mx-auto aspect-square w-full max-w-36 rounded-full object-cover ring-4 ring-brand-50" />
             ) : (

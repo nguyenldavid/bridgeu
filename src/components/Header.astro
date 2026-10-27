@@ -16,9 +16,9 @@ const path = Astro.url.pathname;
 const isActive = (href: string) => path === href || path.startsWith(`${href}/`) || (href === '/volunteering' && path.startsWith('/opportunities'));
 ---
 
-<header class="sticky top-0 z-40 border-b border-line/80 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
+<header id="site-header" class="sticky top-0 z-40 border-b border-line/80 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
   <div class="container-page flex h-16 items-center justify-between gap-4">
-    <a href="/" aria-label="BridgeU home" class="shrink-0"><Wordmark class="text-xl" /></a>
+    <a href="/" aria-label="BridgeU home" class="shrink-0"><Wordmark class="h-10" /></a>
 
     <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
       {
@@ -27,7 +27,7 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`) 
             href={item.href}
             aria-current={isActive(item.href) ? 'page' : undefined}
             class:list={[
-              'rounded-full px-3 py-2 text-sm font-medium transition-colors',
+              'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
               isActive(item.href) ? 'bg-brand-50 text-brand-800' : 'text-muted hover:bg-brand-50/60 hover:text-ink',
             ]}
           >
@@ -44,7 +44,7 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`) 
           <svg viewBox="0 0 24 24" class="size-6 group-open:hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
           <svg viewBox="0 0 24 24" class="hidden size-6 group-open:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
         </summary>
-        <nav aria-label="Mobile" class="absolute top-12 right-0 w-64 rounded-2xl border border-line bg-white p-2 shadow-xl">
+        <nav aria-label="Mobile" class="absolute top-12 right-0 w-64 rounded-xl border border-line bg-white p-2 shadow-xl">
           {
             nav.map((item) => (
               <a href={item.href} class="block rounded-xl px-4 py-3 font-medium hover:bg-brand-50" aria-current={isActive(item.href) ? 'page' : undefined}>

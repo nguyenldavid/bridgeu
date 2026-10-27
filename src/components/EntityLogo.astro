@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 type Props = { src: ImageMetadata; class?: string };
-const { src, class: className = 'size-20 shrink-0 rounded-2xl border border-line bg-white object-contain p-2' } = Astro.props;
+const { src, class: className = 'size-20 shrink-0 rounded-xl border border-line bg-white object-contain p-2' } = Astro.props;
 const svg = src.format === 'svg';
 ---
 

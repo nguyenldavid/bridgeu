@@ -72,7 +72,7 @@ export default function FilterableList({ items, config }: Props) {
               value={state.q}
               onChange={(e) => setState((s) => ({ ...s, q: e.target.value }))}
               placeholder={config.searchPlaceholder}
-              className="w-full rounded-full border border-line bg-white py-2.5 pr-4 pl-11 text-sm shadow-sm placeholder:text-muted/80 focus:border-brand-400 focus:outline-none"
+              className="h-10 w-full rounded-[10px] border border-line bg-white pr-4 pl-11 text-sm shadow-sm placeholder:text-muted/80 focus:border-brand-400 focus:outline-none"
             />
           </label>
           <div className="flex gap-2">
@@ -93,7 +93,7 @@ export default function FilterableList({ items, config }: Props) {
               <select
                 value={state.sort}
                 onChange={(e) => setState((s) => ({ ...s, sort: e.target.value }))}
-                className="w-full rounded-full border border-line bg-white py-2.5 pr-8 pl-4 text-sm font-medium shadow-sm focus:border-brand-400 focus:outline-none"
+                className="h-10 w-full rounded-[10px] border border-line bg-white pr-8 pl-3 text-sm font-medium shadow-sm focus:border-brand-400 focus:outline-none"
               >
                 {config.sorts.map((s) => (
                   <option key={s.value} value={s.value}>
@@ -110,7 +110,7 @@ export default function FilterableList({ items, config }: Props) {
             {results.length} {results.length === 1 ? singular : plural}
           </p>
           {config.locked?.map((l) => (
-            <a key={`${l.key}-${l.value}`} href={l.clearHref} className="inline-flex items-center gap-1 rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold text-brand-800 hover:bg-brand-200" title={`Remove ${l.label}`}>
+            <a key={`${l.key}-${l.value}`} href={l.clearHref} className="inline-flex items-center gap-1 rounded-md bg-brand-100 px-2.5 py-1 text-xs font-semibold text-brand-800 hover:bg-brand-200" title={`Remove ${l.label}`}>
               {l.label}
               <span aria-hidden="true">✕</span>
             </a>
@@ -120,7 +120,7 @@ export default function FilterableList({ items, config }: Props) {
               key={`${c.key}-${c.value}`}
               type="button"
               onClick={() => toggle(c.key, c.value)}
-              className="inline-flex items-center gap-1 rounded-full bg-brand-600 px-3 py-1 text-xs font-semibold text-white hover:bg-brand-700"
+              className="inline-flex items-center gap-1 rounded-md bg-brand-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-brand-700"
               aria-label={`Remove filter ${c.label}`}
             >
               {c.label}
@@ -231,7 +231,7 @@ function FacetGroup({ facet, selected, counts, onToggle }: { facet: FacetDef; se
                 aria-pressed={on}
                 disabled={!on && n === 0}
                 onClick={() => onToggle(o.value)}
-                className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                   on ? 'border-brand-600 bg-brand-600 text-white' : 'border-line bg-white text-ink hover:border-brand-300 hover:bg-brand-50'
                 }`}
               >
@@ -284,7 +284,7 @@ function Row({ item, promo }: { item: ListItem; promo?: ListConfig['promo'] }) {
       </li>
       {promo && (
         <li className="md:col-span-2">
-          <a href={promo.href} data-cta="list-inline" className="group flex flex-col gap-4 rounded-2xl bg-brand-700 p-5 text-white sm:flex-row sm:items-center sm:justify-between">
+          <a href={promo.href} data-cta="list-inline" className="group flex flex-col gap-4 rounded-xl bg-brand-700 p-5 text-white sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="font-bold">{promo.title}</p>
               <p className="mt-1 text-sm text-brand-100">{promo.text}</p>
@@ -299,16 +299,16 @@ function Row({ item, promo }: { item: ListItem; promo?: ListConfig['promo'] }) {
 
 function Card({ item }: { item: ListItem }) {
   return (
-    <article className={`group relative flex h-full gap-4 rounded-2xl border border-line bg-white p-4 transition hover:border-brand-300 hover:shadow-md ${item.active ? '' : 'opacity-70'}`}>
+    <article className={`group relative flex h-full gap-4 rounded-xl border border-line bg-white p-4 transition hover:border-brand-300 hover:shadow-md ${item.active ? '' : 'opacity-70'}`}>
       <Logo src={item.logo} name={item.subtitle || item.title} />
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold leading-snug text-ink group-hover:text-brand-700">
-            <a href={item.href} className="after:absolute after:inset-0 after:rounded-2xl">
+            <a href={item.href} className="after:absolute after:inset-0 after:rounded-xl">
               {item.title}
             </a>
           </h3>
-          {item.badge && <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ring-1 ring-inset ${toneClass[item.badge.tone]}`}>{item.badge.label}</span>}
+          {item.badge && <span className={`shrink-0 rounded-md px-2 py-0.5 text-[11px] font-semibold ring-1 ring-inset ${toneClass[item.badge.tone]}`}>{item.badge.label}</span>}
         </div>
         {item.subtitle && <p className="mt-0.5 truncate text-sm text-muted">{item.subtitle}</p>}
         {item.meta.length > 0 && <p className="mt-1 text-xs font-medium text-muted">{item.meta.join(' · ')}</p>}
@@ -345,7 +345,7 @@ export function Logo({ src, name }: { src?: string; name: string }) {
 
 function EmptyState({ promo, onClear }: { promo: ListConfig['promo']; onClear: () => void }) {
   return (
-    <div className="mt-6 rounded-3xl border border-dashed border-brand-200 bg-brand-50/50 p-8 text-center">
+    <div className="mt-6 rounded-2xl border border-dashed border-brand-200 bg-brand-50/50 p-8 text-center">
       <p className="text-lg font-bold">No matches yet</p>
       <p className="mx-auto mt-1 max-w-md text-sm text-muted">Try removing a filter, or let us tell you when something matching is posted.</p>
       <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">

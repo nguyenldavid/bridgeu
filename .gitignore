@@ -26,3 +26,6 @@ pnpm-debug.log*
 # import
 .import-cache/
 scripts/reports/
+
+# Claude Code
+.claude/

@@ -1,0 +1,115 @@
+---
+import Base from '../../layouts/Base.astro';
+import AppBanner from '../AppBanner.astro';
+import ArticleRow from './ArticleRow.astro';
+import { TOPICS, formatOf, getPosts, type Topic } from '../../lib/blog';
+
+type Props = { topic?: Topic };
+const { topic } = Astro.props;
+
+const all = await getPosts();
+const posts = topic ? all.filter(topic.match) : all;
+const [lead, ...rest] = posts;
+const formats = ['Guide', 'Roundup', 'Interview', 'Video'].filter((f) => posts.some((p) => formatOf(p) === f));
+const segment =
+  'shrink-0 rounded-[7px] px-3 py-1.5 text-sm font-medium whitespace-nowrap text-muted transition-colors hover:text-ink aria-pressed:bg-white aria-pressed:text-ink aria-pressed:shadow-[0_1px_2px_rgb(31_29_43/0.08),0_0_0_1px_rgb(31_29_43/0.08)]';
+const formatLabels: Record<string, string> = { Guide: 'Guides', Roundup: 'Roundups', Interview: 'Interviews', Video: 'Videos' };
+
+const title = topic?.name ?? 'Blog';
+const description = topic?.description ?? 'Guides, interviews and monthly research roundups from students who have been through the process.';
+const tabs = [{ href: '/blog', name: 'All', count: all.length, active: !topic }, ...TOPICS.map((t) => ({ href: `/blog/topic/${t.slug}`, name: t.name, count: all.filter(t.match).length, active: topic?.slug === t.slug }))];
+---
+
+<Base title={topic ? `${topic.name}: BridgeU blog` : 'Blog'} description={description}>
+  <div class="container-page">
+    <header class="pt-12 pb-10 sm:pt-20 sm:pb-14" data-reveal-stagger>
+      {topic && <a data-reveal href="/blog" class="text-sm font-medium text-muted hover:text-ink">Blog</a>}
+      <h1 data-reveal class="mt-2 text-5xl leading-[1.02] font-bold tracking-[-0.035em] sm:text-7xl">{title}</h1>
+      <p data-reveal class="mt-6 max-w-[52ch] text-lg leading-relaxed text-muted sm:text-xl">{description}</p>
+    </header>
+
+    <nav aria-label="Topics" class="flex max-w-full gap-7 overflow-x-auto border-b border-ink/10 [scrollbar-width:none]">
+      {
+        tabs.map((t) => (
+          <a
+            href={t.href}
+            aria-current={t.active ? 'page' : undefined}
+            class:list={['-mb-px shrink-0 border-b-2 pb-3.5 text-[0.9375rem] font-medium whitespace-nowrap transition-colors', t.active ? 'border-brand-600 text-ink' : 'border-transparent text-muted hover:text-ink']}
+          >
+            {t.name}
+            <span class="ml-1.5 text-sm text-muted tabular-nums">{t.count}</span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex flex-wrap items-center justify-between gap-3 py-5">
+      <p class="text-sm text-muted" aria-live="polite" data-count>{posts.length} {posts.length === 1 ? 'article' : 'articles'}</p>
+      {
+        formats.length > 1 && (
+          <div role="group" aria-label="Format" class="flex max-w-full overflow-x-auto rounded-[10px] bg-canvas p-1 ring-1 ring-ink/10 [scrollbar-width:none]" data-format-filter>
+            <button type="button" aria-pressed="true" data-format="" class={segment}>
+              All formats
+            </button>
+            {formats.map((f) => (
+              <button type="button" aria-pressed="false" data-format={f} class={segment}>
+                {formatLabels[f]}
+              </button>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    <div data-articles>
+      {lead && <ArticleRow post={lead} featured />}
+      <div>
+        {rest.map((p) => <ArticleRow post={p} />)}
+      </div>
+      <p data-empty hidden class="border-t border-ink/10 py-16 text-center text-muted">No articles in this format yet. <button type="button" data-reset class="font-semibold text-brand-700 underline underline-offset-4">Show all formats</button></p>
+    </div>
+
+    <AppBanner
+      class="mt-16"
+      tone="soft"
+      placement={topic ? `blog-topic-${topic.slug}` : 'blog-index'}
+      title="Get the monthly research roundup"
+      text="New research programs and deadlines across Canada, delivered once a month through the BridgeU app."
+      label="Subscribe free"
+    />
+  </div>
+</Base>
+
+<script>
+  // Keep the active topic tab visible when the strip scrolls horizontally on small screens.
+  document.querySelector('nav[aria-label="Topics"] [aria-current="page"]')?.scrollIntoView({ block: 'nearest', inline: 'center' });
+
+  // Format filter: progressive enhancement over the server-rendered list; state kept in ?format=.
+  const group = document.querySelector<HTMLElement>('[data-format-filter]');
+  const list = document.querySelector<HTMLElement>('[data-articles]');
+  if (group && list) {
+    const buttons = [...group.querySelectorAll<HTMLButtonElement>('button')];
+    const rows = [...list.querySelectorAll<HTMLElement>('article[data-format]')];
+    const empty = list.querySelector<HTMLElement>('[data-empty]')!;
+    const apply = (format: string) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.format === format)));
+      let shown = 0;
+      rows.forEach((r) => {
+        const on = !format || r.dataset.format === format;
+        r.hidden = !on;
+        if (on) shown++;
+      });
+      empty.hidden = shown > 0;
+      const count = document.querySelector('[data-count]');
+      if (count) count.textContent = `${shown} ${shown === 1 ? 'article' : 'articles'}`;
+      const url = new URL(location.href);
+      if (format) url.searchParams.set('format', format);
+      else url.searchParams.delete('format');
+      history.replaceState(null, '', url);
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.format ?? '')));
+    list.querySelector('[data-reset]')?.addEventListener('click', () => apply(''));
+    const initial = new URL(location.href).searchParams.get('format') ?? '';
+    if (buttons.some((b) => b.dataset.format === initial)) apply(initial);
+  }
+</script>

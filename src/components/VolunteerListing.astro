@@ -68,7 +68,7 @@ const tabs = [{ slug: '', name: 'All cities' }, ...CITIES];
   <div class="container-page py-8">
     {
       !cause && (
-        <nav aria-label="City" class="mb-8 flex max-w-full gap-1 overflow-x-auto rounded-full [scrollbar-width:none] border border-line bg-canvas p-1 sm:inline-flex">
+        <nav aria-label="City" class="mb-8 flex max-w-full gap-1 overflow-x-auto rounded-xl [scrollbar-width:none] border border-line bg-canvas p-1 sm:inline-flex">
           {tabs.map((t) => {
             const on = (city ?? '') === t.slug;
             const n = opps.filter((o) => (!t.slug || o.data.city === t.slug) && isActiveStatus(o.data.status)).length;
@@ -76,13 +76,13 @@ const tabs = [{ slug: '', name: 'All cities' }, ...CITIES];
               <a
                 href={t.slug ? `/volunteering/${t.slug}` : '/volunteering'}
                 aria-current={on ? 'page' : undefined}
-                class:list={['shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors', on ? 'bg-white text-brand-800 shadow-sm ring-1 ring-line' : 'text-muted hover:text-ink']}
+                class:list={['shrink-0 rounded-lg px-4 py-2 text-sm font-semibold transition-colors', on ? 'bg-white text-brand-800 shadow-sm ring-1 ring-line' : 'text-muted hover:text-ink']}
               >
                 {t.name} <span class="font-normal text-muted">{n}</span>
               </a>
             );
           })}
-          <a href={`/organizations${city ? `/${city}` : ''}`} class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-muted hover:text-ink">
+          <a href={`/organizations${city ? `/${city}` : ''}`} class="shrink-0 rounded-lg px-4 py-2 text-sm font-semibold text-muted hover:text-ink">
             Browse organizations →
           </a>
         </nav>

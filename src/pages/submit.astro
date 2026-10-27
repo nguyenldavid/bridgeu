@@ -15,14 +15,14 @@ import art from '../assets/site/save_to_bookmarks.png';
     <a href="mailto:hello@bridgeu.ca" class="btn-secondary btn-lg">Questions? Email us</a>
   </PageHero>
   <div class="container-page max-w-3xl py-12">
-    <ol class="space-y-4">
+    <ol data-reveal-stagger class="space-y-4">
       {
         [
           ['Submit the form', 'Tell us about the role or research program: what it is, who it’s for, and how to apply.'],
           ['We review it', 'Our volunteer team checks the details and contacts you if anything is unclear.'],
           ['Students find it', 'Your listing goes live on BridgeU and reaches students through the app’s alerts.'],
         ].map(([t, d], i) => (
-          <li class="flex gap-4 rounded-3xl border border-line p-5">
+          <li data-reveal class="flex gap-4 rounded-2xl border border-line p-5">
             <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-600 font-bold text-white">{i + 1}</span>
             <div>
               <h2 class="font-bold">{t}</h2>

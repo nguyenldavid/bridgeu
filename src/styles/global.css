@@ -1,8 +1,10 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/inter';
 
 @theme {
-  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Body/UI: Atkinson Hyperlegible Next via Google Fonts <link> in Base.astro (served first-party by Cloudflare Fonts). */
+  --font-sans: 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Headings: Helvetica is not licensed as a web font, so use the system copy (Arial is metric-compatible). */
+  --font-display: 'Helvetica Neue', Helvetica, Arial, 'Nimbus Sans', sans-serif;
 
   --color-brand-50: #f6f3fe;
   --color-brand-100: #ede7fd;
@@ -30,25 +32,28 @@
   body {
     @apply bg-white font-sans text-ink antialiased;
   }
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-display);
+  }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-brand-600;
   }
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-full whitespace-nowrap px-5 py-2.5 text-sm font-semibold transition-colors;
+  @apply inline-flex h-10 items-center justify-center gap-2 rounded-[10px] px-4 text-sm font-semibold whitespace-nowrap transition-[background-color,box-shadow,color] duration-150;
 }
 
 @utility btn-primary {
-  @apply btn bg-brand-600 text-white shadow-sm hover:bg-brand-700;
+  @apply btn bg-brand-600 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_1px_2px_rgb(38_19_79/0.35),0_0_0_1px_rgb(74_38_148)] hover:bg-brand-700;
 }
 
 @utility btn-secondary {
-  @apply btn border border-line bg-white text-ink hover:border-brand-300 hover:bg-brand-50;
+  @apply btn bg-white text-ink shadow-[0_1px_2px_rgb(31_29_43/0.06),0_0_0_1px_rgb(31_29_43/0.12)] hover:bg-canvas hover:shadow-[0_1px_2px_rgb(31_29_43/0.08),0_0_0_1px_rgb(31_29_43/0.2)];
 }
 
 @utility btn-lg {
-  @apply px-6 py-3 text-base;
+  @apply h-12 px-5 text-[0.9375rem];
 }
 
 @utility container-page {
@@ -60,10 +65,65 @@
 }
 
 @utility pill {
-  @apply inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-800;
+  @apply inline-flex items-center rounded-md bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-800;
 }
 
 @layer components {
+  /* Long-form article typography (blog posts). */
+  .prose-article {
+    @apply text-[1.125rem] leading-[1.75] text-ink;
+  }
+  .prose-article :where(p, ul, ol, table) {
+    @apply my-6;
+  }
+  .prose-article :where(h2) {
+    @apply mt-14 mb-4 text-[1.75rem] leading-tight font-bold tracking-tight;
+  }
+  .prose-article :where(h3) {
+    @apply mt-10 mb-3 text-[1.3125rem] leading-snug font-bold tracking-tight;
+  }
+  .prose-article :where(h4) {
+    @apply mt-8 mb-2 font-bold;
+  }
+  .prose-article :where(ul) {
+    @apply list-disc pl-6 marker:text-brand-600;
+  }
+  .prose-article :where(ol) {
+    @apply list-decimal pl-6 marker:font-semibold marker:text-brand-700;
+  }
+  .prose-article :where(li) {
+    @apply my-2 pl-1;
+  }
+  .prose-article :where(a) {
+    @apply font-medium text-brand-700 underline decoration-brand-300 decoration-1 underline-offset-[3px] hover:decoration-brand-700;
+  }
+  .prose-article :where(strong) {
+    @apply font-bold;
+  }
+  .prose-article :where(img) {
+    @apply my-10 h-auto w-full rounded-lg;
+  }
+  .prose-article :where(video) {
+    @apply mx-auto my-10 h-auto max-h-[80vh] w-full max-w-sm rounded-xl bg-black;
+  }
+  .prose-article :where(hr) {
+    @apply mx-auto my-12 w-16 border-t-2 border-brand-600;
+  }
+  .prose-article :where(blockquote) {
+    @apply my-10 border-l-2 border-brand-600 pl-6 font-[family-name:var(--font-display)] text-[1.375rem] leading-snug text-ink;
+  }
+  .prose-article :where(table) {
+    @apply block overflow-x-auto text-base;
+  }
+  .prose-article :where(th, td) {
+    @apply border-b border-ink/10 px-3 py-2.5 text-left;
+  }
+  .prose-article :where(code) {
+    @apply rounded bg-canvas px-1 py-0.5 text-[0.9em];
+  }
+  .prose-article > :first-child {
+    @apply mt-0;
+  }
   .prose-bridge {
     @apply max-w-none text-[1.0625rem] leading-relaxed text-ink;
   }
@@ -114,5 +174,61 @@
   }
   .prose-bridge :where(pre) {
     @apply overflow-x-auto rounded-xl bg-ink p-4 text-sm text-white;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion. One easing curve and timing scale for the whole site.
+   Reveal: elements with [data-reveal] fade up once when they enter the viewport
+   (see src/scripts/reveal.ts). Hidden state only applies once JS has run.
+   --------------------------------------------------------------------------- */
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --reveal-step: 70ms;
+}
+
+.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 1s var(--ease-out);
+  transition-delay: calc(var(--reveal-i, 0) * var(--reveal-step));
+  will-change: opacity, transform;
+}
+.js-reveal [data-reveal='fade'] {
+  transform: none;
+}
+.js-reveal [data-reveal='scale'] {
+  transform: scale(0.985);
+  transition-duration: 1s, 1.4s;
+}
+.js-reveal [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Cross-document page transitions: a short crossfade while the header stays put. */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease-out);
+}
+#site-header {
+  view-transition-name: site-header;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal],
+  .js-reveal [data-reveal='scale'] {
+    transform: none;
+    transition: opacity 0.3s linear;
+    transition-delay: 0ms;
+  }
+  @view-transition {
+    navigation: none;
   }
 }
