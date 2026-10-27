@@ -27,7 +27,7 @@ Sometimes the hardest part is hitting “send.” We’ve drafted three template
 
 ### Template 1: Writing to a Principal Investigator (PI) When You Have Experience
 
-```
+```template
 Dear Dr. [Last Name],
 
 My name is [Your Name], a [Year] undergraduate student in [Program/Major] at [University]. I have developed a strong interest in [specific field, e.g., neural mechanisms underlying neurodegenerative diseases], and I was particularly drawn to your work on [mention paper/project/seminar]. With this in mind, I had a question about [insert specific question about their research]. I find your lab’s focus on [insert research aspect] especially exciting, as it closely aligns with my own interests and experiences.
@@ -47,7 +47,7 @@ Best regards,
 
 ### Template 2: Reaching Out Before You Have Experience
 
-```
+```template
 Dear Dr. [Last Name],
 
 My name is [Your Name], a [Year] undergraduate student in [Program/Major] at [University]. I have developed a strong interest in [specific field, e.g., neural mechanisms underlying neurodegenerative diseases], and I was particularly drawn to your work on [mention paper/project/seminar]. With this in mind, [insert specific question about their research]. I find your lab’s focus on [insert research aspect] especially exciting, as it closely aligns with my own experiences.
@@ -67,7 +67,7 @@ Best regards,
 
 ### Template 3: Reaching out with a Conversation (Our Recommendation!)
 
-```
+```template
 Dear Dr. [Last Name],
 
 My name is [Your Name], a [Year] undergraduate student in [Program/Major] at [University]. I have developed a strong interest in [specific field, e.g., neural mechanisms underlying neurodegenerative diseases], and I was particularly drawn to your work on [mention paper/project/seminar]. With this in mind, I had a question about [insert specific question about their research]. I find your lab’s focus on [insert research aspect] especially exciting, as it closely aligns with my own experiences.

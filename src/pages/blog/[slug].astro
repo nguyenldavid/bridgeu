@@ -93,3 +93,25 @@ const ld = {
     )}
   </div>
 </Base>
+
+<script>
+  // Copy buttons on ```template blocks.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-template]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const body = btn.closest('figure')?.querySelector<HTMLElement>('.tpl-body');
+      if (!body) return;
+      const text = [...body.querySelectorAll('p')].map((p) => p.innerText).join('\n\n');
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = 'Copied';
+      } catch {
+        btn.textContent = 'Press ⌘C to copy';
+        const range = document.createRange();
+        range.selectNodeContents(body);
+        getSelection()?.removeAllRanges();
+        getSelection()?.addRange(range);
+      }
+      setTimeout(() => (btn.textContent = 'Copy'), 2000);
+    });
+  });
+</script>
