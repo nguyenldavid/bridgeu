@@ -1,4 +1,4 @@
-# BridgeU website
+# BridgeU
 
 Static Astro site for [bridgeu.ca](https://bridgeu.ca): research and volunteering opportunities with filters, plus calls to action into the app ([app.bridgeu.ca](https://app.bridgeu.ca)). Deployed on Cloudflare Pages.
 
