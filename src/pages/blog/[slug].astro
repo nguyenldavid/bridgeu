@@ -1,0 +1,52 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import AppBanner from '../../components/AppBanner.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const date = d.date.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const isMed = d.section === 'med-school';
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  datePublished: d.date.toISOString(),
+  author: d.authors.map((name) => ({ '@type': 'Person', name })),
+  publisher: { '@type': 'Organization', name: 'BridgeU' },
+};
+---
+
+<Base title={d.title} description={d.summary} ogType="article" jsonLd={ld}>
+  <article class="container-page max-w-3xl py-10 sm:py-14">
+    <nav aria-label="Breadcrumb" class="text-sm text-muted">
+      <a href="/blog" class="hover:text-brand-700">Blog</a>
+      {isMed && (<><span class="mx-1.5 text-line">/</span><a href="/blog/category/med-school" class="hover:text-brand-700">Med school advice</a></>)}
+    </nav>
+    <header class="mt-5">
+      <div class="flex flex-wrap gap-1.5">{d.tags.map((t) => <span class="pill">{t}</span>)}</div>
+      <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-balance sm:text-5xl">{d.title}</h1>
+      <p class="mt-4 text-muted">
+        <time datetime={d.date.toISOString().slice(0, 10)}>{date}</time>
+        {d.authors.length > 0 && <> · By {d.authors.join(' & ')}</>}
+      </p>
+    </header>
+    {d.cover && <Image src={d.cover} alt="" width={1200} height={500} fit="cover" class="mt-8 aspect-[12/5] w-full rounded-3xl object-cover" loading="eager" />}
+    <div class="prose-bridge mt-10"><Content /></div>
+  </article>
+  <div class="container-page">
+    <AppBanner
+      placement={isMed ? 'med-school-post' : 'blog-post'}
+      title={isMed ? 'Strengthen your application' : 'Find opportunities like these'}
+      text={isMed ? 'Discover research and volunteering roles that build the experiences admissions committees look for.' : 'Get new research and volunteering opportunities delivered to you in the BridgeU app.'}
+      label="Explore the app"
+    />
+  </div>
+</Base>

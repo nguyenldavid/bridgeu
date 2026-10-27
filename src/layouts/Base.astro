@@ -1,0 +1,69 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileCTABar from '../components/MobileCTABar.astro';
+
+type Props = {
+  title: string;
+  description?: string;
+  /** City display name passed to app CTAs on this page (e.g. "Kingston"). */
+  appCity?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  ogType?: 'website' | 'article';
+};
+
+const {
+  title,
+  description = 'BridgeU connects students with volunteering and research opportunities in their community and across Canada.',
+  appCity,
+  noindex = false,
+  jsonLd,
+  ogType = 'website',
+} = Astro.props;
+
+const fullTitle = title === 'BridgeU' ? 'BridgeU: Meaningful opportunities near you' : `${title} · BridgeU`;
+const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/', Astro.site);
+const org = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'BridgeU',
+  url: 'https://bridgeu.ca',
+  email: 'hello@bridgeu.ca',
+  sameAs: ['https://www.linkedin.com/company/bridgeu-ca/', 'https://app.bridgeu.ca'],
+};
+const ld = [org, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#6b38d4" />
+    <meta property="og:site_name" content="BridgeU" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a href="#main" class="sr-only z-50 rounded bg-white px-3 py-2 focus:not-sr-only focus:fixed focus:top-2 focus:left-2">Skip to content</a>
+    <Header appCity={appCity} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer appCity={appCity} />
+    <MobileCTABar appCity={appCity} />
+  </body>
+</html>

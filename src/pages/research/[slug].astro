@@ -1,0 +1,106 @@
+---
+import { getCollection, render } from 'astro:content';
+import EntityLogo from '../../components/EntityLogo.astro';
+import Base from '../../layouts/Base.astro';
+import AppCTA from '../../components/AppCTA.astro';
+import ReportIssue from '../../components/ReportIssue.astro';
+import { PROVINCES, fieldName } from '../../lib/taxonomy';
+import { researchHref } from '../../lib/listings';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('research');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry, all: entries } }));
+}
+
+const { entry, all } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const location = d.scope === 'national' ? 'Canada-wide' : d.scope === 'remote' ? 'Remote' : `${d.city}${d.province ? `, ${PROVINCES[d.province] ?? d.province}` : ''}`;
+const appCity = d.scope === 'city' ? d.city : undefined;
+const related = all
+  .filter((r) => r.id !== entry.id && r.data.fields.some((f) => d.fields.includes(f)))
+  .sort((a, b) => Number(b.data.city === d.city) - Number(a.data.city === d.city))
+  .slice(0, 4);
+
+const facts = [
+  { label: 'Location', value: location },
+  { label: 'Term', value: d.terms.includes('fall') ? 'Summer & fall' : 'Summer' },
+  { label: 'Level', value: d.levels.map((l) => l.replace(/-/g, ' ')).join(', ').replace(/^./, (c) => c.toUpperCase()) || 'Undergraduate' },
+  {
+    label: 'Eligibility',
+    value: d.eligibility === 'university-specific' ? `University-specific${d.eligibleUniversities?.length ? `: ${d.eligibleUniversities.join(', ')}` : ''}` : d.eligibility === 'open' ? 'Open to all students' : 'See program website',
+  },
+];
+---
+
+<Base title={d.title} description={d.summary ?? `${d.title}: research opportunity in ${location}.`} appCity={appCity} ogType="article">
+  <div class="container-page py-8 sm:py-12">
+    <nav aria-label="Breadcrumb" class="text-sm text-muted"><a href="/research" class="hover:text-brand-700">Research</a> <span class="mx-1.5 text-line">/</span> <span class="text-ink">{d.title}</span></nav>
+
+    <div class="mt-6 grid gap-10 lg:grid-cols-[1fr_340px]">
+      <article>
+        <header class="flex items-start gap-5">
+          {d.logo && <EntityLogo src={d.logo} />}
+          <div>
+            {d.institution && <p class="font-medium text-brand-700">{d.institution}</p>}
+            <h1 class="mt-1 text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">{d.title}</h1>
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              {d.kind === 'lab-position' && <span class="pill bg-brand-100">Lab position</span>}
+              {d.fields.map((f) => <a href={`/research?field=${f}`} class="pill hover:bg-brand-100">{fieldName(f)}</a>)}
+            </div>
+          </div>
+        </header>
+
+        <dl class="mt-8 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
+          {facts.map((f) => (
+            <div class="bg-white p-4">
+              <dt class="text-xs font-semibold tracking-wide text-muted uppercase">{f.label}</dt>
+              <dd class="mt-1 font-medium">{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div class="prose-bridge mt-8">
+          <Content />
+        </div>
+
+        <ReportIssue />
+      </article>
+
+      <aside class="lg:pt-2">
+        <div class="space-y-4 lg:sticky lg:top-24">
+          <div class="rounded-3xl border border-line p-5 shadow-sm">
+            <h2 class="font-bold">Apply</h2>
+            <p class="mt-1 text-sm text-muted">Applications are handled by the program. Check their site for the current call.</p>
+            {d.applyUrl && (
+              <a href={d.applyUrl} target="_blank" rel="noopener" class="btn-secondary mt-4 w-full">
+                Visit program website ↗
+              </a>
+            )}
+          </div>
+          <div class="rounded-3xl bg-brand-700 p-5 text-white">
+            <h2 class="font-bold">Deadlines & reminders</h2>
+            <p class="mt-1 text-sm text-brand-100">See this year’s deadline for {d.title} and get a reminder before it closes.</p>
+            <AppCTA placement="research-detail" label="See deadline in the app" city={appCity} variant="inverse" class="mt-4 w-full" />
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    {related.length > 0 && (
+      <section class="mt-16">
+        <h2 class="text-xl font-bold">Similar programs</h2>
+        <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {related.map((r) => (
+            <li>
+              <a href={researchHref(r)} class="block h-full rounded-2xl border border-line p-4 transition hover:border-brand-300 hover:shadow-md">
+                <p class="text-xs text-muted">{r.data.scope === 'national' ? 'Canada-wide' : r.data.city}</p>
+                <p class="mt-1 font-semibold leading-snug">{r.data.title}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</Base>

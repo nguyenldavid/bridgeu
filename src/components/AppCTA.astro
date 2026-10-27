@@ -1,0 +1,25 @@
+---
+import { appUrl } from '../lib/app-link';
+
+type Props = {
+  /** Where on the site this CTA lives; becomes utm_campaign. */
+  placement: string;
+  label?: string;
+  variant?: 'primary' | 'secondary' | 'inverse';
+  size?: 'md' | 'lg';
+  city?: string;
+  class?: string;
+};
+
+const { placement, label = 'Open the app', variant = 'primary', size = 'md', city, class: className } = Astro.props;
+const variants = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  inverse: 'btn bg-white text-brand-800 shadow-sm hover:bg-brand-50',
+};
+---
+
+<a href={appUrl(placement, { city })} class:list={[variants[variant], size === 'lg' && 'btn-lg', className]} data-cta={placement}>
+  {label}
+  <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="size-4"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.64l-3.22-3.22a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.22-3.22H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"></path></svg>
+</a>

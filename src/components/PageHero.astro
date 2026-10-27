@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+type Props = {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  image?: ImageMetadata;
+  breadcrumbs?: { href: string; label: string }[];
+};
+const { eyebrow, title, intro, image, breadcrumbs } = Astro.props;
+---
+
+<section class="overflow-hidden border-b border-line bg-gradient-to-b from-brand-50/70 to-white">
+  <div class="container-page grid items-center gap-8 py-10 sm:py-14 md:grid-cols-[1fr_auto]">
+    <div class="max-w-3xl">
+      {
+        breadcrumbs && (
+          <nav aria-label="Breadcrumb" class="mb-4 text-sm text-muted">
+            {breadcrumbs.map((b, i) => (
+              <>
+                {i > 0 && <span class="mx-1.5 text-line">/</span>}
+                <a href={b.href} class="hover:text-brand-700">
+                  {b.label}
+                </a>
+              </>
+            ))}
+          </nav>
+        )
+      }
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-balance sm:text-5xl">{title}</h1>
+      {intro && <p class="mt-4 text-lg text-pretty text-muted">{intro}</p>}
+      <div class="mt-6 flex flex-wrap gap-3 empty:hidden"><slot /></div>
+    </div>
+    {image && <Image src={image} alt="" width={260} class="hidden h-auto w-56 mix-blend-multiply md:block lg:w-64" loading="eager" />}
+  </div>
+</section>

@@ -1,0 +1,118 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-brand-50: #f6f3fe;
+  --color-brand-100: #ede7fd;
+  --color-brand-200: #dcd0fb;
+  --color-brand-300: #c0aaf6;
+  --color-brand-400: #9e7bef;
+  --color-brand-500: #7f52e5;
+  --color-brand-600: #6b38d4;
+  --color-brand-700: #5a2bb5;
+  --color-brand-800: #4a2694;
+  --color-brand-900: #3e2277;
+  --color-brand-950: #26134f;
+
+  --color-ink: #1f1d2b;
+  --color-muted: #5f5b70;
+  --color-line: #e7e4ee;
+  --color-canvas: #fbfaff;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full whitespace-nowrap px-5 py-2.5 text-sm font-semibold transition-colors;
+}
+
+@utility btn-primary {
+  @apply btn bg-brand-600 text-white shadow-sm hover:bg-brand-700;
+}
+
+@utility btn-secondary {
+  @apply btn border border-line bg-white text-ink hover:border-brand-300 hover:bg-brand-50;
+}
+
+@utility btn-lg {
+  @apply px-6 py-3 text-base;
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+}
+
+@utility eyebrow {
+  @apply text-xs font-semibold tracking-wider text-brand-700 uppercase;
+}
+
+@utility pill {
+  @apply inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-800;
+}
+
+@layer components {
+  .prose-bridge {
+    @apply max-w-none text-[1.0625rem] leading-relaxed text-ink;
+  }
+  .prose-bridge :where(p, ul, ol, figure, video, table, blockquote) {
+    @apply my-4;
+  }
+  .prose-bridge :where(h1, h2) {
+    @apply mt-10 mb-3 text-2xl font-bold tracking-tight;
+  }
+  .prose-bridge :where(h3) {
+    @apply mt-8 mb-2 text-xl font-semibold;
+  }
+  .prose-bridge :where(h4) {
+    @apply mt-6 mb-2 font-semibold;
+  }
+  .prose-bridge :where(ul) {
+    @apply list-disc pl-6;
+  }
+  .prose-bridge :where(ol) {
+    @apply list-decimal pl-6;
+  }
+  .prose-bridge :where(li) {
+    @apply my-1;
+  }
+  .prose-bridge :where(a) {
+    @apply font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 hover:decoration-brand-700;
+  }
+  .prose-bridge :where(img) {
+    @apply h-auto rounded-xl border border-line;
+  }
+  .prose-bridge :where(video) {
+    @apply mx-auto h-auto max-h-[80vh] w-full max-w-sm rounded-xl bg-black;
+  }
+  .prose-bridge :where(hr) {
+    @apply my-8 border-line;
+  }
+  .prose-bridge :where(blockquote) {
+    @apply border-l-4 border-brand-200 pl-4 text-muted;
+  }
+  .prose-bridge :where(table) {
+    @apply block overflow-x-auto text-sm;
+  }
+  .prose-bridge :where(th, td) {
+    @apply border border-line px-3 py-2 text-left;
+  }
+  .prose-bridge :where(code) {
+    @apply rounded bg-brand-50 px-1 py-0.5 text-sm;
+  }
+  .prose-bridge :where(pre) {
+    @apply overflow-x-auto rounded-xl bg-ink p-4 text-sm text-white;
+  }
+}

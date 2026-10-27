@@ -1,0 +1,10 @@
+---
+import OrgListing from '../../../components/OrgListing.astro';
+import { CITIES } from '../../../lib/taxonomy';
+
+export function getStaticPaths() {
+  return CITIES.map((c) => ({ params: { city: c.slug } }));
+}
+---
+
+<OrgListing city={Astro.params.city} />

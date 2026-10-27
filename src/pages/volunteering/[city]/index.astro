@@ -1,0 +1,10 @@
+---
+import VolunteerListing from '../../../components/VolunteerListing.astro';
+import { CITIES } from '../../../lib/taxonomy';
+
+export function getStaticPaths() {
+  return CITIES.map((c) => ({ params: { city: c.slug } }));
+}
+---
+
+<VolunteerListing city={Astro.params.city} />

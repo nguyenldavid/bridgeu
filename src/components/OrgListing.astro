@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from './PageHero.astro';
+import AppBanner from './AppBanner.astro';
+import FilterableList from './filters/FilterableList';
+import type { FacetDef, ListConfig } from './filters/types';
+import { loadVolunteering, organizationItems } from '../lib/listings';
+import { CAUSES, CITIES, cityName } from '../lib/taxonomy';
+import { appUrl } from '../lib/app-link';
+import hero from '../assets/site/best_place.png';
+
+type Props = { city?: string };
+const { city } = Astro.props;
+const { opps, orgs } = await loadVolunteering();
+const scoped = orgs.filter((o) => !city || o.data.city === city);
+const counts = new Map<string, number>();
+for (const o of opps) if (o.data.org) counts.set(o.data.org, (counts.get(o.data.org) ?? 0) + 1);
+const items = await organizationItems(scoped, counts);
+const cityLabel = city ? cityName(city) : undefined;
+const causes = new Set(scoped.flatMap((o) => o.data.causes));
+const facets: FacetDef[] = [
+  {
+    key: 'status',
+    label: 'Availability',
+    display: 'chips',
+    options: [
+      { value: 'accepting', label: 'Accepting volunteers' },
+      { value: 'contact', label: 'Contact to join' },
+    ],
+  },
+  { key: 'cause', label: 'Cause', collapsedCount: 10, options: CAUSES.filter((c) => causes.has(c.slug)).map((c) => ({ value: c.slug, label: c.name })) },
+];
+const config: ListConfig = {
+  facets,
+  sorts: [
+    { value: 'az', label: 'A–Z' },
+    { value: 'recommended', label: 'Recommended' },
+    { value: 'updated', label: 'Recently updated' },
+  ],
+  locked: city ? [{ key: 'city', value: city, label: cityLabel!, clearHref: '/organizations' }] : [],
+  noun: ['organization', 'organizations'],
+  inactiveLabel: 'organizations not currently accepting volunteers',
+  searchPlaceholder: 'Search organizations or causes…',
+  promo: {
+    title: `Follow organizations${cityLabel ? ` in ${cityLabel}` : ''}`,
+    text: 'Get notified in the BridgeU app when the organizations you care about post new roles.',
+    label: 'Get alerts',
+    href: appUrl('org-list', { city: cityLabel }),
+  },
+};
+const title = cityLabel ? `${cityLabel} organizations` : 'Organizations';
+---
+
+<Base title={title} description={`Search ${scoped.length} nonprofits${cityLabel ? ` in ${cityLabel}` : ''} to discover volunteer opportunities tailored to your interests.`} appCity={cityLabel}>
+  <PageHero eyebrow="Organizations" title={title} intro={`Search nonprofits${cityLabel ? ` in ${cityLabel}` : ''} to discover new opportunities, tailored to your interests.`} image={hero}>
+    <a href={city ? `/volunteering/${city}` : '/volunteering'} class="btn-primary btn-lg">Search by opportunity instead</a>
+  </PageHero>
+  <div class="container-page py-8">
+    <nav aria-label="City" class="mb-8 flex max-w-full gap-1 overflow-x-auto rounded-full [scrollbar-width:none] border border-line bg-canvas p-1 sm:inline-flex">
+      {[{ slug: '', name: 'All cities' }, ...CITIES].map((t) => (
+        <a href={t.slug ? `/organizations/${t.slug}` : '/organizations'} aria-current={(city ?? '') === t.slug ? 'page' : undefined} class:list={['rounded-full px-4 py-2 text-sm font-semibold', (city ?? '') === t.slug ? 'bg-white text-brand-800 shadow-sm ring-1 ring-line' : 'text-muted hover:text-ink']}>{t.name}</a>
+      ))}
+    </nav>
+    <FilterableList client:load items={items} config={config} />
+    <AppBanner class="mt-16" placement="org-bottom" city={cityLabel} title="Is your organization missing?" text="List a new opportunity or update your profile. It’s free for nonprofits." label="Join BridgeU" />
+  </div>
+</Base>

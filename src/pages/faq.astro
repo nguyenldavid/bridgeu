@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { appUrl } from '../lib/app-link';
+import support from '../assets/site/instant_support.png';
+
+const app = appUrl('faq');
+const faqs = [
+  {
+    q: 'What is BridgeU?',
+    a: `<p>BridgeU is a community-led project aiming to solve the needs of both students and nonprofits alike. Many growing organizations need more volunteers to enhance their impact, and many students look for fulfilling ways to be involved in their community.</p><p>Thanks to you, our community contributors and our technical team, BridgeU is able to deliver the latest crowdsourced opportunities to students and help meet the needs of local organizations or initiatives seeking volunteers.</p>`,
+  },
+  {
+    q: 'How can I stay updated on new opportunities?',
+    a: `<p>Create a free account in <a href="${app}">the BridgeU app</a> to receive updates on the latest opportunities in the community. You can select the types and locations of opportunities you'd like to hear about.</p>`,
+  },
+  {
+    q: 'How can I list an opportunity or organization that isn’t on BridgeU?',
+    a: `<p>You can make a post using <a href="/submit">our listing submission form</a>. Our staff will contact you shortly once we have reviewed the listing and added it to the platform.</p>`,
+  },
+  {
+    q: 'Who can post an opportunity?',
+    a: `<p>Anyone, including community members and representatives of the organization, can list opportunities on BridgeU. Opportunities are crowdsourced from community members and organizations, and are maintained by our team of volunteers.</p>`,
+  },
+  {
+    q: 'How are volunteers and research students selected?',
+    a: `<p>Each organization has its own selection process, completely independent of BridgeU. Please visit the organization's website for more information on their policies. BridgeU solely helps organizations promote opportunities and connects them to students.</p>`,
+  },
+  {
+    q: 'Is there any support available if I encounter issues while using BridgeU?',
+    a: `<p>Yes! We would be happy to help. You can submit a request using <a href="/contact">our support form</a> or contact us directly at <a href="mailto:hello@bridgeu.ca">hello@bridgeu.ca</a> to discuss other issues or special requests.</p>`,
+  },
+  {
+    q: 'How can I report outdated or inaccurate opportunities?',
+    a: `<p>You can report both content errors and technical difficulties through <a href="/contact">our support form</a>. We greatly appreciate your feedback, which helps all community members find opportunities to make an impact.</p>`,
+  },
+];
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') } })),
+};
+---
+
+<Base title="Frequently asked questions" description="Answers to common questions about BridgeU, listing opportunities and staying updated." jsonLd={ld}>
+  <PageHero eyebrow="FAQ" title="Frequently asked questions" image={support} />
+  <div class="container-page max-w-3xl py-12">
+    <div class="divide-y divide-line rounded-3xl border border-line">
+      {
+        faqs.map((f, i) => (
+          <details class="group p-5 sm:p-6" open={i === 0}>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-semibold [&::-webkit-details-marker]:hidden">
+              {f.q}
+              <span aria-hidden="true" class="text-2xl text-brand-600 transition group-open:rotate-45">+</span>
+            </summary>
+            <div class="prose-bridge mt-3 text-muted" set:html={f.a} />
+          </details>
+        ))
+      }
+    </div>
+    <div class="mt-10 rounded-3xl bg-canvas p-6 ring-1 ring-line">
+      <h2 class="text-xl font-bold">Other questions</h2>
+      <p class="mt-2 text-muted">If your question isn’t answered here, contact our team using our <a href="/contact" class="font-semibold text-brand-700 underline">contact form</a> or by email at <a href="mailto:hello@bridgeu.ca" class="font-semibold text-brand-700 underline">hello@bridgeu.ca</a>.</p>
+    </div>
+  </div>
+</Base>

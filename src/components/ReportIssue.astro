@@ -1,0 +1,14 @@
+---
+import { Image } from 'astro:assets';
+import art from '../assets/site/instant_support.png';
+---
+
+<aside class="mt-12 flex items-center gap-5 rounded-3xl border border-line bg-canvas p-5 sm:p-6">
+  <Image src={art} alt="" width={96} class="hidden h-auto w-20 sm:block" />
+  <div>
+    <h2 class="font-bold">See a mistake or have any feedback?</h2>
+    <p class="mt-1 text-sm text-muted">
+      Please let us know if this listing is inaccurate or out of date via <a href="/contact" class="font-semibold text-brand-700 underline underline-offset-2">our feedback form</a>. We’re dedicated to improving your experience with BridgeU.
+    </p>
+  </div>
+</aside>

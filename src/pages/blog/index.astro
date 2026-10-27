@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import PostList from '../../components/PostList.astro';
+import AppBanner from '../../components/AppBanner.astro';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft && p.data.section === 'blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base title="Blog" description="Monthly research opportunity roundups, cold-email and CV guides, and student interviews from the BridgeU team.">
+  <PageHero eyebrow="Blog" title="Guides, interviews & monthly opportunity roundups" intro="Practical advice for landing research positions and applying to medical school, written by students who’ve done it.">
+    <a href="/blog/category/med-school" class="btn-secondary btn-lg">Med school application advice</a>
+  </PageHero>
+  <div class="container-page py-10">
+    <PostList posts={posts} />
+    <AppBanner class="mt-16" placement="blog-index" title="Get the monthly research roundup" text="Subscribe in the BridgeU app to get new research opportunities in your inbox every month." label="Subscribe free" />
+  </div>
+</Base>

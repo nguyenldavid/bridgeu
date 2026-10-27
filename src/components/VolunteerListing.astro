@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from './PageHero.astro';
+import AppCTA from './AppCTA.astro';
+import AppBanner from './AppBanner.astro';
+import FilterableList from './filters/FilterableList';
+import type { ListConfig, LockedFilter } from './filters/types';
+import { isActiveStatus, loadVolunteering, opportunityFacets, opportunityItems } from '../lib/listings';
+import { CITIES, causeName, cityName } from '../lib/taxonomy';
+import { appUrl } from '../lib/app-link';
+import hero from '../assets/site/happy_announcement.png';
+
+type Props = { city?: string; cause?: string };
+const { city, cause } = Astro.props;
+
+const { opps, orgs, orgById } = await loadVolunteering();
+const scoped = opps.filter((o) => (!city || o.data.city === city) && (!cause || o.data.causes.includes(cause as never)));
+const items = await opportunityItems(scoped, orgById);
+const scopedOrgs = orgs.filter((o) => !city || o.data.city === city);
+
+const cityLabel = city ? cityName(city) : undefined;
+const causeLabel = cause ? causeName(cause) : undefined;
+const locked: LockedFilter[] = [];
+if (city) locked.push({ key: 'city', value: city, label: cityLabel!, clearHref: cause ? `/volunteering?cause=${cause}` : '/volunteering' });
+if (cause) locked.push({ key: 'cause', value: cause, label: causeLabel!, clearHref: `/volunteering/${city}` });
+
+const promoTitle = `Get new ${causeLabel ? `${causeLabel.toLowerCase()} ` : ''}volunteer roles${cityLabel ? ` in ${cityLabel}` : ''} sent to you`;
+const config: ListConfig = {
+  facets: opportunityFacets(items, scopedOrgs, cause ? ['cause'] : []),
+  sorts: [
+    { value: 'recommended', label: 'Recommended' },
+    { value: 'updated', label: 'Recently updated' },
+    { value: 'az', label: 'A–Z' },
+    { value: 'org', label: 'Organization' },
+  ],
+  locked,
+  noun: ['opportunity', 'opportunities'],
+  inactiveLabel: 'inactive or out-of-date listings',
+  searchPlaceholder: 'Search roles, organizations, causes…',
+  promo: {
+    title: promoTitle,
+    text: 'Create a free BridgeU account to save roles and get alerts when organizations post new ones.',
+    label: 'Get alerts',
+    href: appUrl(cause ? 'volunteer-cause-list' : 'volunteer-list', { city: cityLabel }),
+  },
+};
+
+const title = causeLabel && cityLabel ? `${causeLabel} volunteering in ${cityLabel}` : cityLabel ? `Volunteer in ${cityLabel}` : 'Volunteer opportunities';
+const intro = cityLabel
+  ? `Make an impact with ${causeLabel ? `${causeLabel.toLowerCase()} ` : ''}nonprofits in ${cityLabel} who are driving change today. ${items.filter((i) => i.active).length} open roles, curated by the BridgeU community.`
+  : 'Find fulfilling opportunities to make an impact and build your skills near you. Filter by city, cause and availability.';
+
+const tabs = [{ slug: '', name: 'All cities' }, ...CITIES];
+---
+
+<Base title={title} description={intro} appCity={cityLabel}>
+  <PageHero
+    eyebrow="Volunteering"
+    title={title}
+    intro={intro}
+    image={hero}
+    breadcrumbs={cause ? [{ href: '/volunteering', label: 'Volunteering' }, { href: `/volunteering/${city}`, label: cityLabel! }] : undefined}
+  >
+    <AppCTA placement="volunteer-hero" label={`Get ${cityLabel ?? ''} alerts`.replace('  ', ' ')} city={cityLabel} size="lg" />
+    <a href="/submit" class="btn-secondary btn-lg">List an opportunity</a>
+  </PageHero>
+
+  <div class="container-page py-8">
+    {
+      !cause && (
+        <nav aria-label="City" class="mb-8 flex max-w-full gap-1 overflow-x-auto rounded-full [scrollbar-width:none] border border-line bg-canvas p-1 sm:inline-flex">
+          {tabs.map((t) => {
+            const on = (city ?? '') === t.slug;
+            const n = opps.filter((o) => (!t.slug || o.data.city === t.slug) && isActiveStatus(o.data.status)).length;
+            return (
+              <a
+                href={t.slug ? `/volunteering/${t.slug}` : '/volunteering'}
+                aria-current={on ? 'page' : undefined}
+                class:list={['shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors', on ? 'bg-white text-brand-800 shadow-sm ring-1 ring-line' : 'text-muted hover:text-ink']}
+              >
+                {t.name} <span class="font-normal text-muted">{n}</span>
+              </a>
+            );
+          })}
+          <a href={`/organizations${city ? `/${city}` : ''}`} class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-muted hover:text-ink">
+            Browse organizations →
+          </a>
+        </nav>
+      )
+    }
+
+    <FilterableList client:load items={items} config={config} />
+
+    <AppBanner
+      class="mt-16"
+      placement="volunteer-bottom"
+      city={cityLabel}
+      title="Never miss a new opportunity"
+      text={`Sign up in the BridgeU app to receive updates on meaningful opportunities${cityLabel ? ` in ${cityLabel}` : ''}, tailored to your interests.`}
+      label="Create free account"
+    />
+  </div>
+</Base>

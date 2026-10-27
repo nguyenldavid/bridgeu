@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import AppCTA from '../../components/AppCTA.astro';
+import AppBanner from '../../components/AppBanner.astro';
+import FilterableList from '../../components/filters/FilterableList';
+import type { ListConfig } from '../../components/filters/types';
+import { researchFacets, researchItems } from '../../lib/listings';
+import { appUrl } from '../../lib/app-link';
+import hero from '../../assets/site/medical_research.png';
+
+const entries = await getCollection('research');
+const items = await researchItems(entries);
+
+const config: ListConfig = {
+  facets: researchFacets(entries),
+  sorts: [
+    { value: 'az', label: 'A–Z' },
+    { value: 'updated', label: 'Recently updated' },
+    { value: 'org', label: 'Institution' },
+  ],
+  noun: ['program', 'programs'],
+  searchPlaceholder: 'Search programs, institutions, fields…',
+  promo: {
+    title: 'Never miss a research deadline',
+    text: 'See this year’s deadlines and get reminders before applications close in the BridgeU app.',
+    label: 'See deadlines',
+    href: appUrl('research-list'),
+  },
+};
+---
+
+<Base title="Research opportunities" description={`${entries.length} undergraduate summer research programs and studentships across Canada. Filter by field, city and eligibility.`}>
+  <PageHero
+    eyebrow="Research"
+    title="Research opportunities across Canada"
+    intro="Find the latest opportunities from independent researchers and renowned institutions all over Canada to contribute to cutting-edge research and advance science."
+    image={hero}
+  >
+    <AppCTA placement="research-hero" label="See deadlines & get reminders" size="lg" />
+    <a href="/submit" class="btn-secondary btn-lg">List your lab’s opportunity</a>
+  </PageHero>
+
+  <div class="container-page py-8">
+    <FilterableList client:load items={items} config={config} />
+
+    <AppBanner
+      class="mt-16"
+      placement="research-bottom"
+      title="Application deadlines live in the app"
+      text="Program deadlines change every year. BridgeU tracks them for you and sends reminders before they close."
+      label="Get deadline reminders"
+    />
+  </div>
+</Base>

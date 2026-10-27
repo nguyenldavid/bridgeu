@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+type Props = { posts: CollectionEntry<'blog'>[] };
+const { posts } = Astro.props;
+const fmt = (d: Date) => d.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+
+<ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    posts.map((p) => (
+      <li>
+        <a href={`/blog/${p.id}`} class="group flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-white transition hover:border-brand-300 hover:shadow-lg">
+          {p.data.cover ? (
+            <Image src={p.data.cover} alt="" width={640} height={320} fit="cover" class="aspect-[2/1] w-full object-cover" />
+          ) : (
+            <div class="flex aspect-[2/1] items-end bg-gradient-to-br from-brand-100 to-brand-300 p-5">
+              <span class="text-sm font-semibold text-brand-900">{p.data.tags[0] ?? 'BridgeU'}</span>
+            </div>
+          )}
+          <div class="flex flex-1 flex-col p-5">
+            <p class="text-xs font-medium text-muted">
+              {fmt(p.data.date)}
+              {p.data.authors.length > 0 && <> · {p.data.authors.join(' & ')}</>}
+            </p>
+            <h2 class="mt-2 text-lg font-bold leading-snug group-hover:text-brand-700">{p.data.title}</h2>
+            {p.data.summary && <p class="mt-2 line-clamp-3 flex-1 text-sm text-muted">{p.data.summary}</p>}
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              {p.data.tags.map((t) => (
+                <span class="pill">{t}</span>
+              ))}
+            </div>
+          </div>
+        </a>
+      </li>
+    ))
+  }
+</ul>

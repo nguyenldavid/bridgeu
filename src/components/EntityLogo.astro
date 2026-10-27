@@ -1,0 +1,10 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+type Props = { src: ImageMetadata; class?: string };
+const { src, class: className = 'size-20 shrink-0 rounded-2xl border border-line bg-white object-contain p-2' } = Astro.props;
+const svg = src.format === 'svg';
+---
+
+{svg ? <img src={src.src} alt="" width="80" height="80" class={className} /> : <Image src={src} alt="" width={160} height={160} fit="contain" class={className} />}

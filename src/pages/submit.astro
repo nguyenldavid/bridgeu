@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import art from '../assets/site/save_to_bookmarks.png';
+---
+
+<Base title="List an opportunity" description="Don’t see your organization’s opportunity on BridgeU? Submit a listing or update your profile for free.">
+  <PageHero
+    eyebrow="Make a post"
+    title="List an opportunity"
+    intro="Don’t see an opportunity from your organization listed? List a new opportunity or update your profile today. It’s free, and our team reviews every submission."
+    image={art}
+  >
+    <a href="https://bridgeu.paperform.co/" class="btn-primary btn-lg" rel="noopener">Submit a listing ↗</a>
+    <a href="mailto:hello@bridgeu.ca" class="btn-secondary btn-lg">Questions? Email us</a>
+  </PageHero>
+  <div class="container-page max-w-3xl py-12">
+    <ol class="space-y-4">
+      {
+        [
+          ['Submit the form', 'Tell us about the role or research program: what it is, who it’s for, and how to apply.'],
+          ['We review it', 'Our volunteer team checks the details and contacts you if anything is unclear.'],
+          ['Students find it', 'Your listing goes live on BridgeU and reaches students through the app’s alerts.'],
+        ].map(([t, d], i) => (
+          <li class="flex gap-4 rounded-3xl border border-line p-5">
+            <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-600 font-bold text-white">{i + 1}</span>
+            <div>
+              <h2 class="font-bold">{t}</h2>
+              <p class="mt-1 text-muted">{d}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Base>

@@ -1,0 +1,102 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import EntityLogo from '../../components/EntityLogo.astro';
+import Base from '../../layouts/Base.astro';
+import AppCTA from '../../components/AppCTA.astro';
+import ReportIssue from '../../components/ReportIssue.astro';
+import { causeName, cityName, MODES, statusName } from '../../lib/taxonomy';
+import { isActiveStatus, oppHref, orgHref } from '../../lib/listings';
+
+export async function getStaticPaths() {
+  const opps = await getCollection('opportunities');
+  return opps.map((entry) => ({ params: { id: entry.id }, props: { entry, siblings: opps.filter((o) => o.data.org && o.data.org === entry.data.org && o.id !== entry.id) } }));
+}
+
+const { entry, siblings } = Astro.props;
+const d = entry.data;
+const org = d.org ? await getEntry('organizations', d.org) : undefined;
+const { Content } = await render(entry);
+const city = cityName(d.city);
+const mode = MODES.find((m) => m.slug === d.mode)?.name;
+const active = isActiveStatus(d.status);
+const orgName = org?.data.name ?? d.orgName;
+const statusStyles: Record<string, string> = {
+  accepting: 'bg-emerald-50 text-emerald-800 ring-emerald-200',
+  contact: 'bg-amber-50 text-amber-800 ring-amber-200',
+};
+---
+
+<Base title={`${d.title}${orgName ? ` at ${orgName}` : ''}`} description={d.summary || `Volunteer as ${d.title} in ${city}.`} appCity={city} noindex={!active}>
+  <div class="container-page py-8 sm:py-12">
+    <nav aria-label="Breadcrumb" class="text-sm text-muted">
+      <a href="/volunteering" class="hover:text-brand-700">Volunteering</a>
+      <span class="mx-1.5 text-line">/</span>
+      <a href={`/volunteering/${d.city}`} class="hover:text-brand-700">{city}</a>
+      {org && (<><span class="mx-1.5 text-line">/</span><a href={orgHref(org)} class="hover:text-brand-700">{org.data.name}</a></>)}
+    </nav>
+
+    <div class="mt-6 grid gap-10 lg:grid-cols-[1fr_340px]">
+      <article>
+        <header class="flex items-start gap-5">
+          {org?.data.logo && <EntityLogo src={org.data.logo} />}
+          <div>
+            {orgName && (org ? <a href={orgHref(org)} class="font-medium text-brand-700 hover:underline">{orgName}</a> : <p class="font-medium text-brand-700">{orgName}</p>)}
+            <h1 class="mt-1 text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">{d.title}</h1>
+            <div class="mt-3 flex flex-wrap items-center gap-1.5">
+              <span class:list={['rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset', statusStyles[d.status] ?? 'bg-slate-100 text-slate-600 ring-slate-200']}>{statusName(d.status)}</span>
+              <span class="pill bg-slate-100 text-slate-700">{city} · {mode}</span>
+              {d.causes.map((c) => <a href={`/volunteering/${d.city}/${c}`} class="pill hover:bg-brand-100">{causeName(c)}</a>)}
+            </div>
+          </div>
+        </header>
+
+        {!active && (
+          <p class="mt-6 rounded-2xl bg-amber-50 p-4 text-sm text-amber-900 ring-1 ring-amber-200">
+            This role may not be accepting volunteers right now. Check with the organization before applying, or <a href={`/volunteering/${d.city}`} class="font-semibold underline">browse open roles in {city}</a>.
+          </p>
+        )}
+
+        <div class="prose-bridge mt-8">
+          <Content />
+        </div>
+
+        <ReportIssue />
+      </article>
+
+      <aside class="lg:pt-2">
+        <div class="space-y-4 lg:sticky lg:top-24">
+          <div class="rounded-3xl border border-line p-5 shadow-sm">
+            <h2 class="font-bold">{d.status === 'contact' ? 'Contact to join' : 'How to apply'}</h2>
+            <p class="mt-1 text-sm text-muted">Each organization runs its own selection process. Apply directly with {orgName ?? 'the organization'}.</p>
+            {d.applyUrl && (
+              <a href={d.applyUrl} target="_blank" rel="noopener" class="btn-primary mt-4 w-full">
+                Apply on {orgName ? 'their' : 'the'} site ↗
+              </a>
+            )}
+          </div>
+          <div class="rounded-3xl bg-brand-50 p-5 ring-1 ring-brand-100">
+            <h2 class="font-bold">Get roles like this</h2>
+            <p class="mt-1 text-sm text-muted">Save this role and get alerts when {city} organizations post new opportunities.</p>
+            <AppCTA placement="opportunity-detail" label="Save & get alerts" city={city} variant="secondary" class="mt-4 w-full" />
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    {siblings.length > 0 && (
+      <section class="mt-16">
+        <h2 class="text-xl font-bold">More at {orgName}</h2>
+        <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {siblings.slice(0, 9).map((o) => (
+            <li>
+              <a href={oppHref(o)} class="flex h-full items-center justify-between gap-3 rounded-2xl border border-line p-4 transition hover:border-brand-300 hover:shadow-md">
+                <span class="font-semibold leading-snug">{o.data.title}</span>
+                <span aria-hidden="true" class="text-brand-600">→</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</Base>

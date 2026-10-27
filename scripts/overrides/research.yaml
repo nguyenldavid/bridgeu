@@ -1,0 +1,55 @@
+# Hand-curated research metadata, merged over the Notion data on every import.
+# Keys are research slugs. Field slugs come from RESEARCH_FIELDS in src/lib/taxonomy.ts.
+
+amgen-scholars-program: { institution: University of Toronto, fields: [genetics, multidisciplinary] }
+baycrest-rotman-ssrp: { institution: Baycrest, fields: [neuroscience] }
+bbdc-charles-hollenberg-summer-studentship-program-uoft: { institution: Banting & Best Diabetes Centre (UofT), fields: [metabolism] }
+bc-childrens-hospital-summer-studentships: { institution: BC Children's Hospital Research Institute, fields: [child-health] }
+biocanrx-indigenous-student-summer-internship: { institution: BioCanRx, fields: [oncology, infection-immunity] }
+biocanrx-summer-student-internships: { institution: BioCanRx, fields: [oncology, infection-immunity] }
+branch-out-neurological-foundation-undergraduate-grant: { institution: Branch Out Neurological Foundation, fields: [neuroscience] }
+can-tap-talent-summer-student-awards: { institution: CAN-TAP-TALENT, fields: [neuroscience, public-health] }
+canadian-liver-foundation-clf-summer-studentships: { institution: Canadian Liver Foundation, fields: [metabolism] }
+canhepc-summer-student-fellowships: { institution: CanHepC, fields: [infection-immunity, metabolism] }
+centre-for-urban-environment-research-awards: { institution: University of Toronto, fields: [environment] }
+cfid-undergraduate-summer-research-grant: { institution: Canadian Foundation for Infectious Diseases, fields: [infection-immunity] }
+child-study-summer-studentship: { institution: CHILD Cohort Study, fields: [child-health, public-health] }
+cshm-hannah-studentship: { institution: Canadian Society for the History of Medicine, fields: [humanities] }
+epic-inspire-summer-awards: { institution: EPIC (UofT), fields: [public-health], eligibleUniversities: [University of Toronto] }
+hurvitz-brain-sciences-summer-student-research-program: { institution: Sunnybrook, fields: [neuroscience] }
+ircm-scholarships-for-young-researchers: { institution: Montreal Clinical Research Institute (IRCM), fields: [multidisciplinary] }
+jay-and-sari-sonshine-centre-student-award: { institution: Jay and Sari Sonshine Centre (Sunnybrook), fields: [neuroscience] }
+keenan-research-summer-studentship: { institution: Unity Health Toronto, fields: [multidisciplinary] }
+lunenfeld-tanenbaum-rtc-srp: { institution: Lunenfeld-Tanenbaum Research Institute, fields: [genetics, multidisciplinary] }
+mcmaster-biochemistry-and-biomedical-sciences-ssp: { institution: McMaster University, fields: [genetics, infection-immunity] }
+mitacs-globalink-research-award: { institution: Mitacs, fields: [multidisciplinary] }
+nserccihrsshrc-undergraduate-student-research-awards: { institution: NSERC / CIHR / SSHRC, fields: [multidisciplinary] }
+oak-valley-health-summer-student-research-program: { institution: Oak Valley Health, fields: [multidisciplinary] }
+parkinsons-foundation-summer-student-fellowships: { institution: Parkinson's Foundation, fields: [neuroscience] }
+pathai-lab-research-assistant: { institution: PathAI Lab, fields: [ai-data] }
+phri-summer-research-studentship: { institution: Population Health Research Institute, fields: [public-health, cardiovascular] }
+princess-margaret-radiation-medicine-program-rmp: { institution: Princess Margaret Cancer Centre, fields: [oncology, biophysics] }
+queens-maudsley-educational-research-internship-for-health-sciences-students: { institution: Queen's University, fields: [humanities], eligibleUniversities: [Queen's University] }
+queens-undergraduate-student-summer-research-fellowships-ussrf: { institution: Queen's University, fields: [multidisciplinary], eligibleUniversities: [Queen's University] }
+rvh-research-institute-summer-student-research-award: { institution: Royal Victoria Regional Health Centre, fields: [multidisciplinary] }
+sickkids-ssure: { institution: SickKids, fields: [child-health, multidisciplinary] }
+stem-cell-network-summer-studentships-2025: { institution: Stem Cell Network, fields: [blood-stem-cells] }
+sunnybrook-sri-summer-student-research-program: { institution: Sunnybrook Research Institute, fields: [multidisciplinary] }
+tcairem-summer-studentship: { institution: T-CAIREM (UofT), fields: [ai-data] }
+toronto-general-hospital-multi-organ-transplant-student-research-training-program: { institution: University Health Network, fields: [transplant] }
+training-a-new-generation-of-researchers-in-gastroenterology-and-liver-triangle-undergraduate-research-scholarship: { institution: TRIANGLE (CIHR), fields: [metabolism] }
+transform-hf-undergraduate-summer-research-program: { institution: Transform HF, fields: [cardiovascular] }
+ubc-centre-for-blood-research-summer-studentship: { institution: UBC Centre for Blood Research, fields: [blood-stem-cells] }
+uhn-womens-health-summer-studentship-award: { institution: University Health Network, fields: [womens-health] }
+uoft-excellence-award-utea: { institution: University of Toronto, fields: [multidisciplinary], eligibleUniversities: [University of Toronto] }
+uoft-ims-summer-undergraduate-research-program: { institution: UofT Institute of Medical Science, fields: [multidisciplinary] }
+uoft-lmp-summer-undergraduate-research-experience-sure-program: { institution: UofT Laboratory Medicine & Pathobiology, fields: [genetics, infection-immunity] }
+uoft-medical-biophysics-ssp: { institution: UofT Medical Biophysics, fields: [biophysics, oncology] }
+uoft-molecular-genetics-undergraduate-research-opportunity-program: { institution: UofT Molecular Genetics, fields: [genetics] }
+uoft-nutritional-undergraduate-research-opportunity-program: { institution: UofT Nutritional Sciences, fields: [nutrition] }
+uoft-physiology-undergraduate-research-opportunity-program: { institution: UofT Physiology, fields: [multidisciplinary] }
+uoft-st-george-undergraduate-research-opportunity-program-arts-science-faculty: { institution: UofT Faculty of Arts & Science, fields: [multidisciplinary], eligibleUniversities: [University of Toronto] }
+ward-family-summer-student-research-program: { institution: University of Toronto, fields: [child-health] }
+william-osler-summer-student-research-program: { institution: William Osler Health System, fields: [multidisciplinary] }
+women-childrens-health-research-institute-wchri-summer-studentship: { institution: WCHRI (University of Alberta), fields: [child-health, womens-health] }
+womens-college-research-institute-summer-student-research-program: { institution: Women's College Hospital, fields: [womens-health] }

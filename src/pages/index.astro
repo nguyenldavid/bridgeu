@@ -1,0 +1,175 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import AppCTA from '../components/AppCTA.astro';
+import AppBanner from '../components/AppBanner.astro';
+import { CITIES } from '../lib/taxonomy';
+import { isActiveStatus } from '../lib/listings';
+import prioritize from '../assets/site/prioritize.svg';
+import deliveries from '../assets/site/deliveries.svg';
+import queens from '../assets/site/partners/queens.png';
+import western from '../assets/site/partners/western.png';
+import ddqic from '../assets/site/partners/ddqic.png';
+import microsoft from '../assets/site/partners/microsoft.png';
+import webstraw from '../assets/site/partners/webstraw.png';
+
+const [opps, orgs, research, posts] = await Promise.all([getCollection('opportunities'), getCollection('organizations'), getCollection('research'), getCollection('blog')]);
+const openOpps = opps.filter((o) => isActiveStatus(o.data.status));
+const latestPosts = posts
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const partners = [
+  { src: queens, alt: "Queen's University" },
+  { src: western, alt: 'Western University' },
+  { src: ddqic, alt: 'Dunin-Deshpande Queen’s Innovation Centre' },
+  { src: microsoft, alt: 'Microsoft' },
+  { src: webstraw, alt: 'Webstraw' },
+];
+
+const values = [
+  { title: 'Curated', text: 'Find the latest opportunities in your area, curated by our team and the community.', icon: 'M12 6v6l4 2m6-2a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z' },
+  { title: 'Up to date', text: 'Receive updates on new opportunities tailored to your interests in the BridgeU app.', icon: 'M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 0 0-4-5.7V5a2 2 0 1 0-4 0v.3A6 6 0 0 0 6 11v3.2a2 2 0 0 1-.6 1.4L4 17h5m6 0v1a3 3 0 1 1-6 0v-1m6 0H9' },
+  { title: 'Community-focused', text: 'Made by the community, for the community. Post and find new opportunities near you.', icon: 'M17 20h5v-2a3 3 0 0 0-5.4-1.8M17 20H7m10 0v-2c0-.7-.1-1.3-.4-1.8M7 20H2v-2a3 3 0 0 1 5.4-1.8M7 20v-2c0-.7.1-1.3.4-1.8m0 0a5 5 0 0 1 9.2 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z' },
+];
+
+const paths = [
+  {
+    href: '/research',
+    eyebrow: 'Research',
+    title: 'Summer research studentships across Canada',
+    text: `${research.length} programs from SickKids, UHN, Sunnybrook, UBC and more. Filter by field, city and eligibility.`,
+    cta: 'Browse research',
+  },
+  ...CITIES.map((c) => ({
+    href: `/volunteering/${c.slug}`,
+    eyebrow: `Volunteering · ${c.name}`,
+    title: `Volunteer with ${c.name} nonprofits`,
+    text: `${openOpps.filter((o) => o.data.city === c.slug).length} open roles at ${orgs.filter((o) => o.data.city === c.slug).length} organizations, from healthcare to animal care.`,
+    cta: `See ${c.name} roles`,
+  })),
+];
+---
+
+<Base title="BridgeU">
+  <section class="relative overflow-hidden bg-gradient-to-b from-brand-50 via-white to-white">
+    <div class="container-page grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_1fr]">
+      <div>
+        <p class="pill">Volunteering · Research · Youth organizations</p>
+        <h1 class="mt-5 text-4xl font-extrabold tracking-tight text-balance sm:text-6xl">
+          Bridging the gap to <span class="text-brand-600">meaningful opportunities</span> near you.
+        </h1>
+        <p class="mt-5 max-w-xl text-lg text-muted">Explore ways to make change in your local community and beyond: volunteer roles at local nonprofits and research programs across Canada, curated by students.</p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <AppCTA placement="home-hero" label="Discover opportunities" size="lg" />
+          <a href="/research" class="btn-secondary btn-lg">Browse research</a>
+          <a href="/volunteering" class="btn-secondary btn-lg">Browse volunteering</a>
+        </div>
+        <dl class="mt-10 grid max-w-md grid-cols-3 gap-4">
+          <div><dt class="text-xs text-muted">Volunteer roles</dt><dd class="text-2xl font-bold">{openOpps.length}</dd></div>
+          <div><dt class="text-xs text-muted">Organizations</dt><dd class="text-2xl font-bold">{orgs.length}</dd></div>
+          <div><dt class="text-xs text-muted">Research programs</dt><dd class="text-2xl font-bold">{research.length}</dd></div>
+        </dl>
+      </div>
+      <Image src={prioritize} alt="" class="mx-auto h-auto w-full max-w-md mix-blend-multiply" loading="eager" fetchpriority="high" />
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-white py-8" aria-label="Made possible by people at">
+    <div class="container-page">
+      <p class="text-center text-sm font-medium text-muted">Made possible by people at</p>
+      <ul class="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+        {
+          partners.map((p) => (
+            <li>
+              <Image src={p.src} alt={p.alt} height={44} class="h-9 w-auto opacity-80 grayscale transition hover:opacity-100 hover:grayscale-0 sm:h-11" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="container-page py-16 sm:py-24">
+    <div class="max-w-2xl">
+      <p class="eyebrow">Find your fit</p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Find opportunities that are a fit for you.</h2>
+    </div>
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+      {
+        paths.map((p) => (
+          <a href={p.href} class="group flex flex-col rounded-3xl border border-line bg-white p-6 transition hover:border-brand-300 hover:shadow-lg">
+            <p class="eyebrow">{p.eyebrow}</p>
+            <h3 class="mt-3 text-xl font-bold">{p.title}</h3>
+            <p class="mt-2 flex-1 text-muted">{p.text}</p>
+            <span class="mt-6 font-semibold text-brand-700 group-hover:underline">{p.cta} →</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="bg-canvas py-16 sm:py-24">
+    <div class="container-page grid gap-6 md:grid-cols-3">
+      {
+        values.map((v) => (
+          <div class="rounded-3xl bg-white p-6 ring-1 ring-line">
+            <span class="flex size-11 items-center justify-center rounded-2xl bg-brand-100 text-brand-700">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d={v.icon} />
+              </svg>
+            </span>
+            <h3 class="mt-4 text-lg font-bold">{v.title}</h3>
+            <p class="mt-1 text-muted">{v.text}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container-page grid items-center gap-10 py-16 sm:py-24 md:grid-cols-2">
+    <Image src={deliveries} alt="" class="mx-auto h-auto w-full max-w-sm" />
+    <div>
+      <p class="eyebrow">Discover new fields</p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight">Discover new fields. Develop your skills.</h2>
+      <p class="mt-4 text-lg text-muted">BridgeU connects you with a diverse range of nonprofits, institutions and organizations in different sectors. Explore fields that you’re interested in while making an impact.</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/organizations" class="btn-secondary">Browse organizations</a>
+        <a href="/submit" class="btn-secondary">List an opportunity</a>
+      </div>
+    </div>
+  </section>
+
+  {
+    latestPosts.length > 0 && (
+      <section class="container-page pb-16">
+        <div class="flex items-end justify-between gap-4">
+          <h2 class="text-2xl font-bold tracking-tight">From the blog</h2>
+          <a href="/blog" class="font-semibold text-brand-700 hover:underline">
+            All posts →
+          </a>
+        </div>
+        <div class="mt-6 grid gap-5 md:grid-cols-3">
+          {latestPosts.map((p) => (
+            <a href={`/blog/${p.id}`} class="group rounded-3xl border border-line p-5 transition hover:border-brand-300 hover:shadow-md">
+              <p class="text-xs font-medium text-muted">{p.data.date.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</p>
+              <h3 class="mt-2 font-bold group-hover:text-brand-700">{p.data.title}</h3>
+              {p.data.summary && <p class="mt-2 line-clamp-3 text-sm text-muted">{p.data.summary}</p>}
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <div class="container-page">
+    <AppBanner
+      placement="home-bottom"
+      title="Sign up to receive updates on fulfilling opportunities today."
+      text="We promise we won’t spam you! We curate the latest and greatest opportunities for you to make an impact in your community."
+      label="Create free account"
+    />
+  </div>
+</Base>

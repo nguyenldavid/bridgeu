@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import VolunteerListing from '../../../components/VolunteerListing.astro';
+import { CITIES } from '../../../lib/taxonomy';
+
+// One SEO landing page per city × cause that has at least one opportunity.
+export async function getStaticPaths() {
+  const opps = await getCollection('opportunities');
+  return CITIES.flatMap((c) => {
+    const causes = new Set(opps.filter((o) => o.data.city === c.slug).flatMap((o) => o.data.causes));
+    return [...causes].map((cause) => ({ params: { city: c.slug, cause } }));
+  });
+}
+---
+
+<VolunteerListing city={Astro.params.city} cause={Astro.params.cause} />

@@ -1,0 +1,29 @@
+---
+import AppCTA from './AppCTA.astro';
+
+type Props = {
+  placement: string;
+  title: string;
+  text?: string;
+  label?: string;
+  city?: string;
+  tone?: 'brand' | 'soft';
+  class?: string;
+};
+
+const { placement, title, text, label = 'Get alerts in the app', city, tone = 'brand', class: className } = Astro.props;
+---
+
+<section
+  class:list={[
+    'flex flex-col items-start gap-5 rounded-3xl p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8',
+    tone === 'brand' ? 'bg-brand-700 text-white' : 'border border-brand-100 bg-brand-50 text-ink',
+    className,
+  ]}
+>
+  <div class="max-w-2xl">
+    <h2 class="text-xl font-bold tracking-tight sm:text-2xl">{title}</h2>
+    {text && <p class:list={['mt-2', tone === 'brand' ? 'text-brand-100' : 'text-muted']}>{text}</p>}
+  </div>
+  <AppCTA placement={placement} label={label} city={city} variant={tone === 'brand' ? 'inverse' : 'primary'} size="lg" class="shrink-0" />
+</section>
